@@ -19,3 +19,54 @@ CLT uses Linux in the same way as Windows.
 CLT also has cross platform files which can run on any os as long as you build them for the specific os otherwise CLT build folder only offers Windows (.exe) and linux (.elf) pre-built files.
 
 These cross platform files are supposed to work normally on any OS and can be included in any cpp file. These files work cross platform as it doesn't communicate with the OS itself but rather uses pre-made C++ libraries (built in) to do the job. Thanks to this the compiler can build the file in any os executable format and it would work normally.
+
+
+# How to run
+
+To run any file just open the build folder, then open the folder that matches your Operating System, then run the file you want to run.
+
+If you don't see any folder matching your OS then you will have to Build the file itself. Go to section Building Files.
+
+# How to include
+
+To include any of these files, just open your .cpp file then type at the top '#include <fileName.h>' replace 'fileName' with the file you want to import.
+
+Then during building make sure to add another compiler path 'path_to_CLT_folder/src/h' replace 'path_to_CLT_folder' with the path to the Command Line Tools folder. Also make sure to add the file you are including.
+
+Example:
+
+myFile.cpp ->
+
+    #include <binIO.h>
+    #include <iostream>
+
+    int main() {
+        std::string path = "myfile.bin";
+        std::string content = read_binary_file(path);
+        std::cout << content << std::endl;
+        return 0;
+    }
+
+
+Build via g++ ->
+
+    (main) $ g++ myFile.cpp -o myFile.exe CLT/src/binIO.cpp -I./CLT/src/h
+
+    (main) $ ./myFile.exe
+    
+    Hello World!
+
+    (main) $
+
+
+The main command is broke down as follows ->
+
+g++ -> actual program we are running for build
+
+myFile.cpp -> The main program.
+
+-o myFile.exe -> The output file we want '-o' stands for output.
+
+CLT/src/binIO.cpp -> The linked binIO 'example' file. NOTE: The folder is renamed to CLT.
+
+-I./CLT/src/h -> The added compiler path. '-I' is used for adding compiler path.
