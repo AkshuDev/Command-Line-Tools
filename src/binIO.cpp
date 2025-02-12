@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <vector>
 
-std::string read_binary_file(const std::string &path, std::streampos seekPos, bool error=true) {
+std::string read_binary_file(const std::string &path, std::streampos seekPos=0, bool error=true) {
     std::ifstream file(path, std::ios::binary);
 
     // Check if file is open
@@ -43,6 +43,67 @@ std::string read_binary_file(const std::string &path, std::streampos seekPos, bo
     return result;
 }
 
-int main(int argc, char** argv){
+int main(int argc, char* argv[]){
+    std::string path;
+    std::string content;
+    bool error = true;
+    int seek = 0;
+
+    int mode = 1;
+
+    if (argc > 1) {
+        for (int cmd; cmd <= argc; cmd++){
+            switch (argv[cmd]) {
+                case "-f":
+                    try{
+                        path = argv[cmd + 1];
+                    } catch (const std::exception &e) {
+                        std::cerr << "Usage: Error\nCODE: CLT#src#binIO#main#001\n\n" << e << std::endl;
+                        return -991;
+                    }
+                case "-error:false":
+                    error = false;
+                case "-error:true":
+                    error = true;
+                case "-r":
+                    mode = 1;
+                case "-w":
+                    mode = 2;
+                    try{
+                        path = argv[cmd + 1];
+                    } catch (const std::exception &e) {
+                        std::cerr << "Usage: Error\nCODE: CLT#src#binIO#main#002\n\n" << e << std::endl;
+                        return -992;
+                    }
+                case "-a":
+                    mode = 3;
+                    try{
+                        path = argv[cmd + 1];
+                    } catch (const std::exception &e) {
+                        std::cerr << "Usage: Error\nCODE: CLT#src#binIO#main#003\n\n" << e << std::endl;
+                        return -993;
+                    }
+                case "-seek":
+                    try{
+                        seek = argc[cmd + 1];
+                    } catch (const std::exception &e) {
+                        std::cerr << "Usage: Error\nCODE: CLT#src#binIO#main#003\n\n" << e << std::endl;
+                        return -993;
+                    }
+                case "-content":
+                    try{
+                        content = argc[cmd + 1];
+                    } catch (const std::exception &e) {
+                        std::cerr << "Usage: Error\nCODE: CLT#src#binIO#main#003\n\n" << e << std::endl;
+                        return -993;
+                    }
+            }
+        }
+
+        if (mode == 1){
+            cout << read_binary_file(path, seek, error) << std::endl;
+        }
+    }
+
     return 0;
 }

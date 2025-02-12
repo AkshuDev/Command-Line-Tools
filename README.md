@@ -31,7 +31,7 @@ If you don't see any folder matching your OS then you will have to Build the fil
 
 To include any of these files, just open your .cpp file then type at the top '#include <fileName.h>' replace 'fileName' with the file you want to import.
 
-Then during building make sure to add another compiler path 'path_to_CLT_folder/src/h' replace 'path_to_CLT_folder' with the path to the Command Line Tools folder. Also make sure to add the file you are including.
+Then during building make sure to add another compiler path 'path_to_CLT_folder/src/h' replace 'path_to_CLT_folder' with the path to the Command Line Tools folder. Also make sure to add the file library you are including. For this example we are using '.dll' (Dynamic Link Library) (Windows)
 
 Example:
 
@@ -50,7 +50,7 @@ myFile.cpp ->
 
 Build via g++ ->
 
-    (main) $ g++ myFile.cpp -o myFile.exe CLT/src/binIO.cpp -I./CLT/src/h
+    (main) $ g++ myFile.cpp -o myFile.exe -L./CLT/build/windows/Dlls -lbasicIO -I./CLT/src/h
 
     (main) $ ./myFile.exe
     
@@ -67,7 +67,7 @@ myFile.cpp -> The main program.
 
 -o myFile.exe -> The output file we want '-o' stands for output.
 
-CLT/src/binIO.cpp -> The linked binIO 'example' file. NOTE: The folder is renamed to CLT.
+-L./CLT/build/windows/Dlls -lbasicIO -> The linked binIO 'example' dll file. NOTE: The folder is renamed to CLT.
 
 -I./CLT/src/h -> The added compiler path. '-I' is used for adding compiler path.
 
