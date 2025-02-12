@@ -70,3 +70,32 @@ myFile.cpp -> The main program.
 CLT/src/binIO.cpp -> The linked binIO 'example' file. NOTE: The folder is renamed to CLT.
 
 -I./CLT/src/h -> The added compiler path. '-I' is used for adding compiler path.
+
+# Building the CLT files for custom OS
+
+For building the files, you can use a number of programs. Recommended 'g++' or 'gcc'.
+
+To build the files, you need to take an note that you can only build cross-platform files because the OS specific will require certain libraries to build that are OS specific.
+
+
+Step 1. Use 'g++' or any compiler to compile every file
+
+Step 2. Set the output to CLT/build/(your OS)/(the filename).(the os executable extension)
+
+Step 3. Do this with every file and done!
+
+
+g++ ->
+
+    (main) $ g++ CLT/src/binIO.cpp -o CLT/build/MyOS/binIO.myOSexec
+
+    (main) $
+
+
+This is the meaning of the command ->
+
+g++: The main program we will call.
+
+CLT/src/binIO.cpp: Example Compilation file path.
+
+-o CLT/build/MyOS/binIO.myOSexec: Example output path.
