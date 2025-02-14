@@ -50,7 +50,7 @@ myFile.cpp ->
 
 Build via g++ ->
 
-    (main) $ g++ myFile.cpp -o myFile.exe -L./CLT/build/windows/Dlls -lbasicIO -I./CLT/src/h
+    (main) $ g++ myFile.cpp -o myFile.exe -L./CLT/build/windows/Lib -lbasicIO -I./CLT/src/h
 
     (main) $ ./myFile.exe
     
@@ -67,7 +67,7 @@ myFile.cpp -> The main program.
 
 -o myFile.exe -> The output file we want '-o' stands for output.
 
--L./CLT/build/windows/Dlls -lbasicIO -> The linked binIO 'example' dll file. NOTE: The folder is renamed to CLT.
+-L./CLT/build/windows/Lib -lbasicIO -> The linked binIO 'example' dll file. NOTE: The folder is renamed to CLT.
 
 -I./CLT/src/h -> The added compiler path. '-I' is used for adding compiler path.
 
@@ -83,7 +83,6 @@ Step 1. Use 'g++' or any compiler to compile every file
 Step 2. Set the output to CLT/build/(your OS)/(the filename).(the os executable extension)
 
 Step 3. Do this with every file and done!
-
 
 g++ ->
 

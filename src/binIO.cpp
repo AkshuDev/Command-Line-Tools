@@ -1,10 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include <filesystem>
 #include <vector>
 #include <algorithm>
 #include <cstring>
-#include <cstdlib>
+#include <cstdio>
 
 // Function to append data to a binary file
 // Parameters:
@@ -34,7 +33,7 @@ bool append_binary_file(const std::string &path, const std::vector<char> &data, 
 // - error: Flag to indicate whether to print error messages
 // Returns: True if the delete operation was successful, false otherwise
 bool delete_binary_file(const std::string &path, bool error=true) {
-    if (!std::filesystem::remove(path)) {
+    if (std::remove(path.c_str()) != 0) {
         std::string error_1 = "Issue Deleting File. CODE: CLT#src#binIO#delete_binary_file#001";
         if (error) {
             std::cerr << error_1 << std::endl;
@@ -51,14 +50,20 @@ bool delete_binary_file(const std::string &path, bool error=true) {
 // - error: Flag to indicate whether to print error messages
 // Returns: True if the copy operation was successful, false otherwise
 bool copy_binary_file(const std::string &source, const std::string &destination, bool error=true) {
-    try {
-        std::filesystem::copy(source, destination, std::filesystem::copy_options::overwrite_existing);
-    } catch (const std::filesystem::filesystem_error &e) {
+    std::ifstream src(source, std::ios::binary);
+    std::ofstream dest(destination, std::ios::binary);
+
+    if (!src || !dest) {
+        std::string error_1 = "Issue Opening Files for Copy. CODE: CLT#src#binIO#copy_binary_file#001";
         if (error) {
-            std::cerr << "Issue Copying File. CODE: CLT#src#binIO#copy_binary_file#001\n" << e.what() << std::endl;
+            std::cerr << error_1 << std::endl;
         }
         return false;
     }
+
+    dest << src.rdbuf();
+    src.close();
+    dest.close();
     return true;
 }
 
@@ -69,11 +74,10 @@ bool copy_binary_file(const std::string &source, const std::string &destination,
 // - error: Flag to indicate whether to print error messages
 // Returns: True if the move operation was successful, false otherwise
 bool move_binary_file(const std::string &source, const std::string &destination, bool error=true) {
-    try {
-        std::filesystem::rename(source, destination);
-    } catch (const std::filesystem::filesystem_error &e) {
+    if (std::rename(source.c_str(), destination.c_str()) != 0) {
+        std::string error_1 = "Issue Moving File. CODE: CLT#src#binIO#move_binary_file#001";
         if (error) {
-            std::cerr << "Issue Moving File. CODE: CLT#src#binIO#move_binary_file#001\n" << e.what() << std::endl;
+            std::cerr << error_1 << std::endl;
         }
         return false;
     }
@@ -166,6 +170,8 @@ int main(int argc, char* argv[]) {
     int seek = 0;
     int bufferSize = 1024;
     int mode = 0;
+    bool convert = false;
+    std::string convertion;
 
     if (argc > 1) {
         for (int i = 1; i < argc; ++i) {
@@ -202,6 +208,9 @@ int main(int argc, char* argv[]) {
             } else if (arg == "-size" && i + 1 < argc) {
                 mode = 7;
                 path = argv[++i];
+            } else if (arg == "-convert" && i + 1 < argc) {
+                convertion = argv[++i];
+                convert = true;
             }
         }
 
@@ -256,7 +265,23 @@ int main(int argc, char* argv[]) {
             case 7: {
                 std::streampos size = get_binary_file_size(path, error);
                 if (size != -1) {
-                    std::cout << "File Size: " << size << " bytes" << std::endl;
+                    if (!convert) {
+                        std::cout << "File Size: " << size << " bytes" << std::endl;
+                    } else {
+                        std::streampos convertedSize;
+                        if (convertion == "KB") {
+                            convertedSize = size / 1024;
+                        } else if (convertion == "MB") {
+                            convertedSize = size / (1024 * 1024);
+                        } else if (convertion == "GB") {
+                            convertedSize = size / (1024 * 1024 * 1024);
+                        } else {
+                            std::cerr << "Invalid conversion type!" << std::endl;
+                            break;
+                        }
+
+                        std::cout << "File Size: " << convertedSize << " " << convertion << std::endl;
+                    }
                 } else {
                     std::cout << "Failed to get file size!" << std::endl;
                 }
